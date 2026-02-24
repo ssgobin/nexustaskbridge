@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bridge de Tarefas | Nexus</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Bridge de Tarefas</h1>
+        <p>Projeto separado do Nexus, usando a mesma base de dados</p>
+      </div>
+      <div class="status-wrap">
+        <span id="cloudBadge" class="pill warn">Conectando…</span>
+        <button id="btnRefresh" class="btn ghost">Atualizar</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card form-card">
+        <h2>Nova tarefa</h2>
+        <form id="taskForm">
+          <div class="row">
+            <label>TÍTULO</label>
+            <input id="fTitle" required maxlength="140" placeholder="Título da tarefa" />
+          </div>
+
+          <div class="row">
+            <label>OBJETIVO DA TAREFA</label>
+            <input id="fTask" required maxlength="220" placeholder="Objetivo da tarefa" />
+          </div>
+
+          <div class="row">
+            <label>DESCREVER A TAREFA</label>
+            <textarea id="fDesc" rows="4" placeholder="Descreva a tarefa"></textarea>
+          </div>
+
+          <div class="row cols-2">
+            <div>
+              <label>RESPONSÁVEL</label>
+              <select id="fResp" required>
+                <option value="">Carregando…</option>
+              </select>
+            </div>
+            <div>
+              <label>STATUS</label>
+              <select id="fStatus">
+                <option>PENDENTE</option>
+                <option>EXECUÇÃO</option>
+                <option>APROVAR</option>
+                <option>CORRIGIR</option>
+                <option>FINALIZAR</option>
+                <option>CONCLUÍDO</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row cols-2">
+            <div>
+              <label>DATA SOLICITAÇÃO</label>
+              <input id="fRequestAt" type="datetime-local" />
+            </div>
+            <div>
+              <label>PRAZO DE ENTREGA (DATA E HORA)</label>
+              <input id="fDue" type="datetime-local" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <label>DATA CONCLUSÃO</label>
+            <input id="fDoneAt" type="datetime-local" disabled readonly />
+          </div>
+          <div class="row inline-note">
+            <span>Preenchimento automático:</span>
+            <strong>Data de conclusão vem do card no Nexus</strong>
+          </div>
+
+          <div class="row">
+            <label>OBS</label>
+            <textarea id="fObs" rows="3" placeholder="Observações"></textarea>
+          </div>
+
+          <div class="row inline-note">
+            <span>Solicitante fixo:</span>
+            <strong>Adolpho</strong>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn primary" id="btnSave">Salvar + criar card no Nexus</button>
+            <button type="button" class="btn ghost" id="btnClear">Limpar</button>
+          </div>
+          <div id="formMsg" class="msg"></div>
+        </form>
+      </section>
+
+      <section class="card list-card">
+        <div class="list-head">
+          <h2>Tarefas recentes</h2>
+          <input id="qSearch" placeholder="Buscar tarefa, responsável ou status" />
+        </div>
+        <div id="taskList" class="task-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
