@@ -1,111 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bridge de Tarefas | Nexus</title>
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <div>
-        <h1>Bridge de Tarefas</h1>
-        <p>Projeto separado do Nexus, usando a mesma base de dados</p>
-      </div>
-      <div class="status-wrap">
-        <span id="cloudBadge" class="pill warn">Conectando…</span>
-        <button id="btnRefresh" class="btn ghost">Atualizar</button>
+      <div class="header-content">
+        <div class="logo-area">
+          <div class="logo-icon"><i class="fas fa-clipboard-list"></i></div>
+          <div>
+            <h1>Bridge de Tarefas</h1>
+            <p>Sistema integrado com Nexus - Gerenciamento de Tarefas</p>
+          </div>
+        </div>
+        <div class="status-wrap">
+          <span id="cloudBadge" class="pill warn">
+            <span class="pill-icon"><i class="fas fa-bolt"></i></span>
+            <span>Conectando…</span>
+          </span>
+          <button id="btnRefresh" class="btn ghost icon-btn" title="Atualizar tarefas">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
       </div>
     </header>
 
     <main class="grid">
       <section class="card form-card">
-        <h2>Nova tarefa</h2>
+        <div class="card-header">
+          <h2><i class="fas fa-sparkles"></i> Nova Tarefa</h2>
+          <p class="card-subtitle">Preencha os dados para criar uma nova tarefa no sistema</p>
+        </div>
         <form id="taskForm">
-          <div class="row">
-            <label>TÍTULO</label>
-            <input id="fTitle" required maxlength="140" placeholder="Título da tarefa" />
-          </div>
-
-          <div class="row">
-            <label>OBJETIVO DA TAREFA</label>
-            <input id="fTask" required maxlength="220" placeholder="Objetivo da tarefa" />
-          </div>
-
-          <div class="row">
-            <label>DESCREVER A TAREFA</label>
-            <textarea id="fDesc" rows="4" placeholder="Descreva a tarefa"></textarea>
-          </div>
-
-          <div class="row cols-2">
-            <div>
-              <label>RESPONSÁVEL</label>
-              <select id="fResp" required>
-                <option value="">Carregando…</option>
-              </select>
+          <div class="form-section">
+            <div class="row">
+              <label>
+                <span class="label-icon"><i class="fas fa-pencil-alt"></i></span>
+                TÍTULO
+              </label>
+              <input id="fTitle" required maxlength="140" placeholder="Digite o título da tarefa" />
             </div>
-            <div>
-              <label>STATUS</label>
-              <select id="fStatus">
-                <option>PENDENTE</option>
-                <option>EXECUÇÃO</option>
-                <option>APROVAR</option>
-                <option>CORRIGIR</option>
-                <option>FINALIZAR</option>
-                <option>CONCLUÍDO</option>
-              </select>
+
+            <div class="row">
+              <label>
+                <span class="label-icon"><i class="fas fa-bullseye"></i></span>
+                OBJETIVO DA TAREFA
+              </label>
+              <input id="fTask" required maxlength="220" placeholder="Qual é o objetivo desta tarefa?" />
+            </div>
+
+            <div class="row">
+              <label>
+                <span class="label-icon"><i class="fas fa-file-alt"></i></span>
+                DESCREVER A TAREFA
+              </label>
+              <textarea id="fDesc" rows="4" placeholder="Descreva detalhadamente a tarefa a ser realizada"></textarea>
             </div>
           </div>
 
-          <div class="row cols-2">
-            <div>
-              <label>DATA SOLICITAÇÃO</label>
-              <input id="fRequestAt" type="datetime-local" />
+          <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-users"></i> Responsabilidade e Status</h3>
+            <div class="row cols-2">
+              <div>
+                <label>
+                  <span class="label-icon"><i class="fas fa-user"></i></span>
+                  RESPONSÁVEL
+                </label>
+                <select id="fResp" required>
+                  <option value="">Carregando usuários…</option>
+                </select>
+              </div>
+              <div>
+                <label>
+                  <span class="label-icon"><i class="fas fa-chart-bar"></i></span>
+                  STATUS
+                </label>
+                <select id="fStatus">
+                  <option>PENDENTE</option>
+                  <option>EXECUÇÃO</option>
+                  <option>APROVAR</option>
+                  <option>CORRIGIR</option>
+                  <option>FINALIZAR</option>
+                  <option>CONCLUÍDO</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label>PRAZO DE ENTREGA (DATA E HORA)</label>
-              <input id="fDue" type="datetime-local" required />
+          </div>
+
+          <div class="form-section">
+            <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Prazos e Datas</h3>
+            <div class="row cols-2">
+              <div>
+                <label>
+                  <span class="label-icon"><i class="fas fa-calendar-plus"></i></span>
+                  DATA SOLICITAÇÃO
+                </label>
+                <input id="fRequestAt" type="datetime-local" />
+              </div>
+              <div>
+                <label>
+                  <span class="label-icon"><i class="fas fa-clock"></i></span>
+                  PRAZO DE ENTREGA
+                </label>
+                <input id="fDue" type="datetime-local" required />
+              </div>
+            </div>
+
+            <div class="row">
+              <label>
+                <span class="label-icon"><i class="fas fa-check-circle"></i></span>
+                DATA CONCLUSÃO
+              </label>
+              <input id="fDoneAt" type="datetime-local" disabled readonly />
+            </div>
+            <div class="info-box">
+              <span class="info-icon"><i class="fas fa-info-circle"></i></span>
+              <span>A data de conclusão é preenchida automaticamente quando o card no Nexus é marcado como
+                concluído.</span>
             </div>
           </div>
 
-          <div class="row">
-            <label>DATA CONCLUSÃO</label>
-            <input id="fDoneAt" type="datetime-local" disabled readonly />
-          </div>
-          <div class="row inline-note">
-            <span>Preenchimento automático:</span>
-            <strong>Data de conclusão vem do card no Nexus</strong>
-          </div>
+          <div class="form-section">
+            <div class="row">
+              <label>
+                <span class="label-icon"><i class="fas fa-comment"></i></span>
+                OBSERVAÇÕES
+              </label>
+              <textarea id="fObs" rows="3" placeholder="Adicione observações ou informações adicionais"></textarea>
+            </div>
 
-          <div class="row">
-            <label>OBS</label>
-            <textarea id="fObs" rows="3" placeholder="Observações"></textarea>
-          </div>
-
-          <div class="row inline-note">
-            <span>Solicitante fixo:</span>
-            <strong>Adolpho</strong>
+            <div class="info-box">
+              <span class="info-icon"><i class="fas fa-user-tie"></i></span>
+              <span><strong>Solicitante fixo:</strong> Adolpho</span>
+            </div>
           </div>
 
           <div class="actions">
-            <button type="submit" class="btn primary" id="btnSave">Salvar + criar card no Nexus</button>
-            <button type="button" class="btn ghost" id="btnClear">Limpar</button>
+            <button type="submit" class="btn primary" id="btnSave">
+              <span class="btn-icon"><i class="fas fa-save"></i></span>
+              <span>Salvar + criar card no Nexus</span>
+            </button>
+            <button type="button" class="btn ghost" id="btnClear">
+              <span class="btn-icon"><i class="fas fa-trash-alt"></i></span>
+              <span>Limpar formulário</span>
+            </button>
           </div>
           <div id="formMsg" class="msg"></div>
         </form>
       </section>
 
       <section class="card list-card">
+        <div class="card-header">
+          <h2><i class="fas fa-book"></i> Tarefas Recentes</h2>
+          <p class="card-subtitle">Visualize e acompanhe todas as tarefas criadas</p>
+        </div>
         <div class="list-head">
-          <h2>Tarefas recentes</h2>
-          <input id="qSearch" placeholder="Buscar tarefa, responsável ou status" />
+          <div class="search-box">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input id="qSearch" placeholder="Buscar por tarefa, responsável ou status..." />
+          </div>
         </div>
         <div id="taskList" class="task-list"></div>
       </section>
     </main>
+
+    <footer class="app-footer">
+      <p>© 2026 Bridge de Tarefas Nexus | Sistema integrado de gerenciamento</p>
+    </footer>
   </div>
 
   <script type="module" src="./app.js"></script>
 </body>
+
 </html>

@@ -54,12 +54,18 @@ function nowLocalInput() {
 }
 function toIsoOrNull(v) { return v ? new Date(v).toISOString() : null; }
 function toPt(v) { return v ? new Date(v).toLocaleString('pt-BR') : '—'; }
-function escapeHtml(s='') {
+function escapeHtml(s = '') {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 function setMsg(type, text) {
   el.msg.className = `msg ${type || ''}`.trim();
   el.msg.textContent = text || '';
+  if (text) {
+    el.msg.style.animation = 'none';
+    setTimeout(() => {
+      el.msg.style.animation = 'slideInUp 0.3s ease-out';
+    }, 10);
+  }
 }
 
 function buildNexusDesc({ acoes, objetivo, info }) {
@@ -78,7 +84,9 @@ ${i || 'Listar todas as informações pertinentes que contribuam para a ação m
 
 function setLoading(v) {
   el.btnSave.disabled = v;
-  el.btnSave.textContent = v ? 'Salvando…' : 'Salvar + criar card no Nexus';
+  const icon = v ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-save"></i>';
+  const text = v ? 'Salvando tarefa…' : 'Salvar + criar card no Nexus';
+  el.btnSave.innerHTML = `<span class="btn-icon">${icon}</span><span>${text}</span>`;
 }
 
 async function init() {
@@ -91,12 +99,12 @@ async function init() {
 
     db = getFirestore(app);
     el.badge.className = 'pill ok';
-    el.badge.textContent = 'Firebase conectado';
+    el.badge.innerHTML = '<span class="pill-icon"><i class="fas fa-check"></i></span><span>Firebase conectado</span>';
 
     el.requestAt.value = nowLocalInput();
     const plus1h = new Date(Date.now() + 3600_000);
     plus1h.setMinutes(plus1h.getMinutes() - plus1h.getTimezoneOffset());
-    el.due.value = plus1h.toISOString().slice(0,16);
+    el.due.value = plus1h.toISOString().slice(0, 16);
 
     await loadUsers();
     startTasksListener();
@@ -105,8 +113,8 @@ async function init() {
   } catch (err) {
     console.error(err);
     el.badge.className = 'pill err';
-    el.badge.textContent = 'Falha no Firebase';
-    setMsg('err', `Não foi possível conectar no Firebase. ${err?.message || 'Confira config/regras/autenticação.'}`);
+    el.badge.innerHTML = '<span class="pill-icon"><i class="fas fa-times"></i></span><span>Falha no Firebase</span>';
+    setMsg('err', `<i class="fas fa-exclamation-circle"></i> Não foi possível conectar no Firebase. ${err?.message || 'Confira config/regras/autenticação.'}`);
   }
 }
 
@@ -202,8 +210,12 @@ function bindEvents() {
   });
   el.q.addEventListener('input', renderList);
   el.refresh.addEventListener('click', async () => {
+    el.refresh.style.animation = 'spin 0.5s ease-in-out';
     await loadUsers();
     renderList();
+    setTimeout(() => {
+      el.refresh.style.animation = '';
+    }, 500);
   });
 }
 
@@ -285,13 +297,19 @@ async function onSubmit(ev) {
       createdAt: serverTimestamp()
     });
 
-    setMsg('ok', `Tarefa salva e card criado no Nexus (card: ${cardRef.id}).`);
+    setMsg('ok', `<i class="fas fa-check-circle"></i> Tarefa salva com sucesso! Card criado no Nexus (ID: ${cardRef.id})`);
     el.form.reset();
     el.requestAt.value = nowLocalInput();
     el.doneAt.value = "";
+    // Auto-scroll para a lista de tarefas em telas pequenas
+    if (window.innerWidth <= 1024) {
+      setTimeout(() => {
+        document.querySelector('.list-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
   } catch (err) {
     console.error(err);
-    setMsg('err', `Erro ao salvar: ${err?.message || err}`);
+    setMsg('err', `<i class="fas fa-exclamation-triangle"></i> Erro ao salvar tarefa: ${err?.message || err}`);
   } finally {
     setLoading(false);
   }
@@ -306,29 +324,31 @@ function renderList() {
   });
 
   if (!rows.length) {
-    el.list.innerHTML = '<div class="empty">Nenhuma tarefa encontrada</div>';
+    const emptyMsg = q ? '<i class="fas fa-search"></i> Nenhuma tarefa encontrada para sua busca' : '<i class="fas fa-inbox"></i> Nenhuma tarefa cadastrada ainda';
+    el.list.innerHTML = `<div class="empty">${emptyMsg}</div>`;
     return;
   }
 
-  el.list.innerHTML = rows.map(r => {
+  el.list.innerHTML = rows.map((r, idx) => {
     const statusClass = r.status === 'CONCLUÍDO' ? 'ok' : (new Date(r.prazoEntrega || 0) < new Date() ? 'err' : 'warn');
+    const statusIcon = r.status === 'CONCLUÍDO' ? '<i class="fas fa-check-circle"></i>' : (r.status === 'EXECUÇÃO' ? '<i class="fas fa-cog fa-spin"></i>' : (r.status === 'PENDENTE' ? '<i class="fas fa-hourglass-half"></i>' : '<i class="fas fa-clipboard"></i>'));
     return `
-      <div class="task-item">
-        <div class="title">${escapeHtml(r.titulo || r.tarefa || '(sem título)')}</div>
+      <div class="task-item" style="animation-delay: ${idx * 0.05}s">
+        <div class="title"><i class="fas fa-thumbtack"></i> ${escapeHtml(r.titulo || r.tarefa || '(sem título)')}</div>
         <div class="meta">
-          <span><strong>Resp:</strong> ${escapeHtml(r.responsavel || '—')}</span>
-          <span><strong>Solicitante:</strong> ${escapeHtml(r.solicitante || FIXED_SOLICITANTE)}</span>
-          <span><strong>Solicitação:</strong> ${toPt(r.dataSolicitacao)}</span>
-          <span><strong>Prazo:</strong> ${toPt(r.prazoEntrega)}</span>
-          <span><strong>Conclusão:</strong> ${toPt(r.dataConclusao)}</span>
+          <span><i class="fas fa-user"></i> ${escapeHtml(r.responsavel || '—')}</span>
+          <span><i class="fas fa-user-tie"></i> ${escapeHtml(r.solicitante || FIXED_SOLICITANTE)}</span>
+          <span><i class="far fa-calendar-plus"></i> ${toPt(r.dataSolicitacao)}</span>
+          <span><i class="far fa-clock"></i> ${toPt(r.prazoEntrega)}</span>
+          ${r.dataConclusao ? `<span><i class="fas fa-check-circle"></i> ${toPt(r.dataConclusao)}</span>` : ''}
         </div>
         <div class="badges">
-          <span class="pill ${statusClass}">${escapeHtml(r.status || '—')}</span>
-          ${r.nexusCardId ? `<span class="pill">Card Nexus: ${escapeHtml(r.nexusCardId)}</span>` : ''}
+          <span class="pill ${statusClass}">${statusIcon} ${escapeHtml(r.status || '—')}</span>
+          ${r.nexusCardId ? `<span class="pill" title="ID do card no Nexus"><i class="fas fa-link"></i> Card: ${escapeHtml(r.nexusCardId.substring(0, 8))}...</span>` : ''}
         </div>
-        ${r.objetivoTarefa ? `<div class="desc"><strong>Objetivo:</strong> ${escapeHtml(r.objetivoTarefa)}</div>` : ''}
-        ${r.descritivo ? `<div class="desc"><strong>Descrever:</strong> ${escapeHtml(r.descritivo)}</div>` : ''}
-        ${r.obs ? `<div class="obs"><strong>Informações adicionais / OBS:</strong> ${escapeHtml(r.obs)}</div>` : ''}
+        ${r.objetivoTarefa ? `<div class="desc"><strong><i class="fas fa-bullseye"></i> Objetivo:</strong> ${escapeHtml(r.objetivoTarefa)}</div>` : ''}
+        ${r.descritivo ? `<div class="desc"><strong><i class="fas fa-file-alt"></i> Descrição:</strong> ${escapeHtml(r.descritivo)}</div>` : ''}
+        ${r.obs ? `<div class="obs"><strong><i class="fas fa-comment"></i> Observações:</strong> ${escapeHtml(r.obs)}</div>` : ''}
       </div>
     `;
   }).join('');
