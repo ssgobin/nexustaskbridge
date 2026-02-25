@@ -1,28 +1,28 @@
 :root {
-  --bg-start: #0a0e27;
-  --bg-end: #1a1f3a;
-  --panel: #1c2333;
-  --panel-hover: #242b3d;
-  --panel-2: #1e2738;
-  --text: #f0f4ff;
-  --text-secondary: #b8c5db;
-  --muted: #8b9bb5;
-  --line: rgba(255, 255, 255, .08);
-  --line-strong: rgba(255, 255, 255, .15);
-  --ok: #10d97f;
-  --ok-bg: rgba(16, 217, 127, .15);
-  --warn: #ffa726;
-  --warn-bg: rgba(255, 167, 38, .15);
-  --err: #ff5252;
-  --err-bg: rgba(255, 82, 82, .15);
-  --accent: #5b8def;
-  --accent-light: #7aa3f5;
-  --accent-bg: rgba(91, 141, 239, .15);
-  --glow-accent: rgba(91, 141, 239, .3);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, .2);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, .25);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .35);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, .4);
+  --bg-start: #f4f7ff;
+  --bg-end: #e8eef7;
+  --panel: #ffffff;
+  --panel-hover: #f3f6fb;
+  --panel-2: #f8fafc;
+  --text: #1c2333;
+  --text-secondary: #3b4a66;
+  --muted: #6b7a95;
+  --line: rgba(15, 23, 42, .08);
+  --line-strong: rgba(15, 23, 42, .14);
+  --ok: #0f9f5a;
+  --ok-bg: rgba(15, 159, 90, .12);
+  --warn: #d9891a;
+  --warn-bg: rgba(217, 137, 26, .14);
+  --err: #e23b3b;
+  --err-bg: rgba(226, 59, 59, .12);
+  --accent: #2f6fe4;
+  --accent-light: #4d85f0;
+  --accent-bg: rgba(47, 111, 228, .12);
+  --glow-accent: rgba(47, 111, 228, .25);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, .08);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, .12);
+  --shadow-lg: 0 8px 32px rgba(15, 23, 42, .18);
+  --shadow-xl: 0 16px 48px rgba(15, 23, 42, .22);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -109,7 +109,7 @@ body::before {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  background: rgba(28, 35, 51, .6);
+  background: rgba(255, 255, 255, .7);
   backdrop-filter: blur(12px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -177,7 +177,7 @@ body::before {
 
 /* ========== CARDS ========== */
 .card {
-  background: rgba(28, 35, 51, .7);
+  background: rgba(255, 255, 255, .85);
   backdrop-filter: blur(16px);
   border: 1px solid var(--line);
   border-radius: var(--radius-xl);
@@ -189,7 +189,7 @@ body::before {
 
 .card:hover {
   border-color: var(--line-strong);
-  box-shadow: 0 16px 56px rgba(0, 0, 0, .45), 0 0 0 1px var(--line-strong);
+  box-shadow: 0 16px 56px rgba(15, 23, 42, .18), 0 0 0 1px var(--line-strong);
 }
 
 @keyframes scaleIn {
@@ -241,14 +241,14 @@ body::before {
 .form-section {
   margin-bottom: 28px;
   padding: 20px;
-  background: rgba(255, 255, 255, .02);
+  background: rgba(15, 23, 42, .02);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   transition: var(--transition);
 }
 
 .form-section:hover {
-  background: rgba(255, 255, 255, .04);
+  background: rgba(15, 23, 42, .04);
   border-color: var(--line-strong);
 }
 
@@ -317,7 +317,7 @@ body::before {
 .row textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: rgba(255, 255, 255, .02);
+  background: rgba(15, 23, 42, .02);
 }
 
 .row textarea {
@@ -501,7 +501,7 @@ body::before {
 }
 
 .task-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, .03);
+  background: rgba(15, 23, 42, .04);
   border-radius: 10px;
 }
 
@@ -627,7 +627,7 @@ body::before {
   font-size: 14px;
   line-height: 1.6;
   padding: 12px;
-  background: rgba(255, 255, 255, .02);
+  background: rgba(15, 23, 42, .03);
   border-radius: var(--radius-sm);
   border-left: 3px solid var(--accent);
 }
@@ -643,7 +643,7 @@ body::before {
   font-size: 13px;
   font-style: italic;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, .02);
+  background: rgba(15, 23, 42, .03);
   border-radius: var(--radius-sm);
 }
 
